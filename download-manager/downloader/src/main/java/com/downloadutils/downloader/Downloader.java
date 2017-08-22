@@ -1,0 +1,144 @@
+package com.downloadutils.downloader;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class Downloader implements Runnable {
+
+	private URL fileUrl;
+	private long fileSize;
+	private String completeFilePath;
+	String status = "";
+	private final int BUFFER_SIZE=10*1024;
+
+	public String startDownlaod(String url, String downloadLocation) {
+		try{
+		if (!(url == null || url.isEmpty())){
+			if(!(downloadLocation == null || downloadLocation.isEmpty())){
+				if (verifyURL(url)) {
+					completeFilePath = getFilePath(fileUrl, downloadLocation);
+					fileSize = checkIfFileExists();
+					Thread downloadThread = new Thread(this);
+					downloadThread.start();
+					
+				} else {
+					throw new Exception("Invalid URL.");
+				}
+			}else{
+				throw new Exception("Download location specified is incorrect.");
+			}
+		} else{
+			throw new Exception("Invalid URL.");
+		}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		status = "Download successfull";
+		
+		return status;
+
+	}
+	
+	/**
+	 * To check if file already exists at given location
+	 * @return fileSize
+	 */
+
+	private long checkIfFileExists() {
+		// TODO Auto-generated method stub
+		File file = new File(completeFilePath);
+		if (file.exists() && file.isFile()) {
+			System.out.println("File Exists with Size: " + file.length());
+			System.out.println("Resuming download from "+file.length()+" bytes");
+			return file.length();
+		}
+		return 0;
+	}
+
+	/**
+	 * Verify whether an URL is valid
+	 * 
+	 * @param fileURL
+	 * @return the verified URL, null if invalid
+	 */
+	public boolean verifyURL(String url) {
+		if (!url.toLowerCase().startsWith("http://"))
+			return false;
+		try {
+			fileUrl = new URL(url);
+		} catch (Exception e) {
+			return false;
+		}
+		if (fileUrl.getFile().length() < 2)
+			return false;
+
+		return true;
+	}
+	
+	/**
+	 * To create the file path from provide downloadLocation and fileName
+	 * @param url
+	 * @param downloadLocation
+	 * @return
+	 */
+
+	private String getFilePath(URL url, String downloadLocation) {
+		String filePath = "";
+		String fileName = url.getFile();
+		fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+		filePath = downloadLocation + "/" + fileName;
+		return filePath;
+
+	}
+	public void run() {
+		BufferedInputStream in = null;
+		RandomAccessFile raf = null;
+		try {
+			long startByte = fileSize;
+			HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
+			connection.setConnectTimeout(10000);
+			connection.setRequestProperty("Range", "bytes=" + startByte + "-");
+			connection.connect();
+			if (connection.getResponseCode() / 100 != 2) {
+				throw new Exception("Error occured!! Connection ended with response code :"+ connection.getResponseCode());
+			}
+			int contentLength = connection.getContentLength();
+			if (contentLength < 1) {
+				throw new Exception("Error occcured!!: No file present at given URL");
+			}
+			fileSize = contentLength;
+			System.out.println("Remaining File size: " + fileSize);
+			in = new BufferedInputStream(connection.getInputStream());
+			raf = new RandomAccessFile(completeFilePath, "rw");
+			raf.seek(startByte);
+			byte buffer[];
+			if (fileSize - startByte > BUFFER_SIZE) {
+				buffer = new byte[BUFFER_SIZE];
+			} else {
+				buffer = new byte[(int) (fileSize)];
+			}
+			int numRead = -1;
+			int downloaded = 0;
+			while ((numRead = in.read(buffer)) != -1) {
+				raf.write(buffer, 0, numRead);
+				downloaded += numRead;
+				String data = "\r" + downloaded + "/" + fileSize + " Downloaded";
+				System.out.write(data.getBytes());
+			}
+			if (downloaded == fileSize) {
+				System.out.println();
+				System.out.println("Download Completed!!");
+			}
+
+		} catch (Exception e) {
+			
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+}
