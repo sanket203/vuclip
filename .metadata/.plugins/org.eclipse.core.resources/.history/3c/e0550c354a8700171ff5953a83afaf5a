@@ -10,7 +10,6 @@ public class DownloadManager {
 			Downloader manager = new Downloader();
 			
 			String status = manager.startDownlaod(args[1],args[2]);
-			System.out.println(status);
 		}else{
 			System.out.println("please enter a valid commmand to download");
 			System.exit(1);

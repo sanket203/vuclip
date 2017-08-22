@@ -134,7 +134,6 @@ public class Downloader implements Runnable {
 			}
 			if (downloaded == fileSize) {
 				System.out.println();
-				status = SUCCESS;
 			}
 
 		} catch (Exception e) {

@@ -35,12 +35,13 @@ public class Downloader implements Runnable {
 				throw new Exception("Download location specified can not be empty.");
 			}
 		} else{
-			throw new Exception("URL can not be empty.");
+			throw new Exception("URL can  not be empty.");
 		}
 		}catch(Exception e){
-			status = ERROR;
 			System.out.println(e.getMessage());
 		}
+		
+		status = "Download successfull";
 		
 		return status;
 
@@ -134,11 +135,11 @@ public class Downloader implements Runnable {
 			}
 			if (downloaded == fileSize) {
 				System.out.println();
-				status = SUCCESS;
+				System.out.println("Download Completed!!");
 			}
 
 		} catch (Exception e) {
-			status = ERROR;
+			
 			System.out.println(e.getMessage());
 		}
 

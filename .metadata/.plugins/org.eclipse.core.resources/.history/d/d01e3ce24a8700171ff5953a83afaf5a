@@ -13,8 +13,6 @@ public class Downloader implements Runnable {
 	private String completeFilePath;
 	String status = "";
 	private final int BUFFER_SIZE=10*1024;
-	private static final String SUCCESS = "Download Successfull.";
-	private static final String ERROR = "Download Unsuccessfull";
 
 	public String startDownlaod(String url, String downloadLocation) {
 		Thread downloadThread;
@@ -26,21 +24,21 @@ public class Downloader implements Runnable {
 					fileSize = checkIfFileExists();
 					 downloadThread = new Thread(this);
 					downloadThread.start();
-					downloadThread.join();
 					
 				} else {
 					throw new Exception("Invalid URL.");
 				}
 			}else{
-				throw new Exception("Download location specified can not be empty.");
+				throw new Exception("Download location specified is incorrect.");
 			}
 		} else{
-			throw new Exception("URL can not be empty.");
+			throw new Exception("Invalid URL.");
 		}
 		}catch(Exception e){
-			status = ERROR;
 			System.out.println(e.getMessage());
 		}
+		
+		status = "Download successfull";
 		
 		return status;
 
@@ -134,11 +132,11 @@ public class Downloader implements Runnable {
 			}
 			if (downloaded == fileSize) {
 				System.out.println();
-				status = SUCCESS;
+				System.out.println("Download Completed!!");
 			}
 
 		} catch (Exception e) {
-			status = ERROR;
+			
 			System.out.println(e.getMessage());
 		}
 

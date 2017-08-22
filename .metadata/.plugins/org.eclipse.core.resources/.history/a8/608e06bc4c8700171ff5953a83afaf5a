@@ -41,6 +41,7 @@ public class Downloader implements Runnable {
 			status = ERROR;
 			System.out.println(e.getMessage());
 		}
+		status = SUCCESS;
 		
 		return status;
 
@@ -134,7 +135,6 @@ public class Downloader implements Runnable {
 			}
 			if (downloaded == fileSize) {
 				System.out.println();
-				status = SUCCESS;
 			}
 
 		} catch (Exception e) {

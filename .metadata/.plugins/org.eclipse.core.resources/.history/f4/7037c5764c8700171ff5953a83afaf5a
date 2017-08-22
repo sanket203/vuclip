@@ -29,18 +29,22 @@ public class Downloader implements Runnable {
 					downloadThread.join();
 					
 				} else {
+					status = ERROR;
 					throw new Exception("Invalid URL.");
 				}
 			}else{
+				status = ERROR;
 				throw new Exception("Download location specified can not be empty.");
 			}
 		} else{
+			status = ERROR;
 			throw new Exception("URL can not be empty.");
 		}
 		}catch(Exception e){
-			status = ERROR;
 			System.out.println(e.getMessage());
 		}
+		
+		status = SUCCESS;
 		
 		return status;
 
@@ -134,11 +138,11 @@ public class Downloader implements Runnable {
 			}
 			if (downloaded == fileSize) {
 				System.out.println();
-				status = SUCCESS;
+				System.out.println("Download Completed!!");
 			}
 
 		} catch (Exception e) {
-			status = ERROR;
+			
 			System.out.println(e.getMessage());
 		}
 
