@@ -11,14 +11,28 @@ import com.downloadutils.downloader.Downloader;
 public class DownloaderTest {
 	
 	@Test()
-	    public void startDownloadNullTest(){
+	    public void startDownloadNullTestBothParamtersNull(){
 	        Downloader downloader = new Downloader();
 	        assertNotNull(downloader.startDownlaod(null,null));
 	        
 	    }
+	
+	@Test()
+    public void startDownloadNullTestURLNull(){
+        Downloader downloader = new Downloader();
+        assertNotNull(downloader.startDownlaod(null,"http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP"));
+        
+    }
+	
+	@Test()
+    public void startDownloadNullTestDownloadLocationNull(){
+        Downloader downloader = new Downloader();
+        assertNotNull(downloader.startDownlaod("http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP",null));
+        
+    }
 	 
 	 @Test()
-	    public void startDownloadTest(){
+	    public void startDownloadTestValidParameters(){
 	        Downloader downloader = new Downloader();
 	       downloader.startDownlaod("http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP","D:\\docs");
 	    }
