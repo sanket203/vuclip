@@ -3,11 +3,11 @@ jdk:
   - oraclejdk8
 sudo: false
 before_script: cd download-manager
-script: mvn clean install
+script: mvn clean install package
 deploy:
   provider: releases
   api_key: '$GITHUB_API_KEY'
-  file: "target/downloadutils-jar-with-dependencies.jar"
+  file: "target/downloadrunner-jar-with-dependencies.jar"
   skip_cleanup: true
   on:
     tags: true
