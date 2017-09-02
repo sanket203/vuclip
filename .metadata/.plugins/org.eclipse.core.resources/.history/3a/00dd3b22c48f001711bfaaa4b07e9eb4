@@ -1,5 +1,7 @@
 package com.downloadutils.test;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import com.downloadutils.downloader.DownloadService;
