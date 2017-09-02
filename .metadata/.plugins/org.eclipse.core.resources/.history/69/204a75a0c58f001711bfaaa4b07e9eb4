@@ -8,7 +8,7 @@ import com.downloadutils.exception.BaseException;
 public class DownloaderTest {
 
 	
-	@Test(expected = BaseException.class)
+	@Test(expected = Exception.class)
 	public void downlaodForInValidUrlParameter() throws BaseException {
 
 		String url = "https://www.colorado.edu/conflict/peace/download/peace_essay";
@@ -19,7 +19,7 @@ public class DownloaderTest {
 
 	}
 
-	@Test(expected = BaseException.class)
+	@Test(expected = Exception.class)
 	public void downlaodForNullUrlParameter() throws BaseException {
 
 		String url = null;
@@ -30,7 +30,7 @@ public class DownloaderTest {
 
 	}
 
-	@Test(expected = BaseException.class)
+	@Test(expected = Exception.class)
 	public void downlaodForNullLocationParameter() throws BaseException {
 
 		String url = "http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP";
