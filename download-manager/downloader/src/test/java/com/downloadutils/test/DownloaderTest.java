@@ -1,62 +1,67 @@
 package com.downloadutils.test;
 
-
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.downloadutils.downloader.Downloader;
+import com.downloadutils.downloader.DownloadService;
+import com.downloadutils.exception.BaseException;
 
 public class DownloaderTest {
-	
-	@Test()
-	    public void startDownloadNullTestBothParamtersNull(){
-	        Downloader downloader = new Downloader();
-	        assertNotNull(downloader.startDownlaod(null,null));
-	        
-	    }
-	
-	@Test()
-    public void startDownloadNullTestURLNull(){
-        Downloader downloader = new Downloader();
-        assertNotNull(downloader.startDownlaod(null,"http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP"));
-        
-    }
-	
-	@Test()
-    public void startDownloadNullTestDownloadLocationNull(){
-        Downloader downloader = new Downloader();
-        assertNotNull(downloader.startDownlaod("http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP",null));
-        
-    }
-	 
-	 @Test()
-	    public void startDownloadTestValidParameters(){
-	        Downloader downloader = new Downloader();
-	       downloader.startDownlaod("http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP","D:\\docs");
-	    }
-	 
-	 @Test()
-	    public void testUrlValid(){
-	        Downloader downloader = new Downloader();
-	        String url = "http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP";
-	        
-	      assertTrue(downloader.verifyURL(url));
-	    }
-	 @Test()
-	    public void testUrlInValidForHttp(){
-	        Downloader downloader = new Downloader();
-	        String url = "https://ww.colorado.edu/conflict/peace/download/peace_essay.ZIP";
-	        
-	      assertFalse(downloader.verifyURL(url));
-	    }
-	 
-	 
-	 
-	 
-	 
-	 
-	 
 
+	@Test
+	public void downlaodForValidParameters() throws BaseException {
+
+		String url = "http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP";
+		String location = "D:\\docs";
+
+		DownloadService service = new DownloadService();
+		String status = service.startDownlaod(url, location);
+		assertEquals(status, "Download Successfull.");
+
+	}
+
+	@Test(expected = Exception.class)
+	public void downlaodForInValidUrlParameter() throws BaseException {
+
+		String url = "https://www.colorado.edu/conflict/peace/download/peace_essay";
+		String location = "D:\\docs";
+
+		DownloadService service = new DownloadService();
+		service.startDownlaod(url, location);
+
+	}
+
+	@Test(expected = Exception.class)
+	public void downlaodForNullUrlParameter() throws BaseException {
+
+		String url = null;
+		String location = "D:\\docs";
+
+		DownloadService service = new DownloadService();
+		service.startDownlaod(url, location);
+
+	}
+
+	@Test(expected = Exception.class)
+	public void downlaodForNullLocationParameter() throws BaseException {
+
+		String url = "http://www.colorado.edu/conflict/peace/download/peace_essay.ZIP";
+		String location = null;
+
+		DownloadService service = new DownloadService();
+		service.startDownlaod(url, location);
+
+	}
+
+	@Test(expected = Exception.class)
+	public void downlaodForNullParameters() throws BaseException {
+
+		String url = null;
+		String location = null;
+
+		DownloadService service = new DownloadService();
+		service.startDownlaod(url, location);
+
+	}
 }
